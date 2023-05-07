@@ -83,6 +83,6 @@ async function handleNewQuestion(interactionData) {
 }
 
 module.exports = {
-  newQuestionCommand,
-  handleNewQuestion,
+  data: newQuestionCommand,
+  execute: handleNewQuestion,
 };

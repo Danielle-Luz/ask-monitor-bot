@@ -1,0 +1,60 @@
+const folderReader = require("node:fs");
+const folderPathConcatenator = require("node:path");
+
+const { Collection } = require("discord.js");
+
+function addCommandsFromAllFilesInCollection(botInstance) {
+  const commandsDefinitionFolderPath = folderPathConcatenator(
+    __dirname,
+    "commands-definition"
+  );
+  const commandsDefinitionFiles = folderReader.readdirSync(
+    commandsDefinitionFolderPath
+  );
+
+  botInstance.commands = new Collection();
+
+  commandsDefinitionFiles.forEach((commandFile) => {
+    const commandFilePath = folderPathConcatenator.join(
+      commandsDefinitionFolderPath,
+      commandFile
+    );
+    const commandData = require(commandFilePath);
+
+    if ("data" in commandData && "execute" in commandData) {
+      botInstance.commands.set(commandData.data.name, commandData);
+    } else {
+      console.log(
+        `[WARNING] The command at ${commandFilePath} must have this properties: data, execute`
+      );
+    }
+  });
+}
+
+async function executeCommandFromCollection(interactionData) {
+  addCommandsFromAllFilesInCollection(interactionData.client);
+
+  const commandData = interactionData.client.commands.get(
+    interactionData.commandName
+  );
+
+  if (!commandData) {
+    const commandNOtFoundError = `The command /${interactionData.commandName} was not found`;
+
+    interactionData.reply(commandNOtFoundError);
+    console.error(commandNOtFoundError);
+
+    return;
+  }
+
+  try {
+    await commandData.execute(interactionData);
+  } catch (error) {
+    console.error(error.message);
+    interactionData.reply("An error ocurred and the command was not executed");
+  }
+}
+
+module.exports = {
+  executeCommandFromCollection,
+};
