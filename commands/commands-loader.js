@@ -3,7 +3,7 @@ const folderPathConcatenator = require("node:path");
 
 const { Collection } = require("discord.js");
 
-function addCommandsFromAllFilesInCollection(commandAsJson) {
+function addCommandsFromAllFilesInCollection() {
   const commandsDefinitionFolderPath = folderPathConcatenator.join(
     __dirname,
     "commands-definition"
@@ -22,13 +22,7 @@ function addCommandsFromAllFilesInCollection(commandAsJson) {
     const commandData = require(commandFilePath);
     
     if ("data" in commandData && "execute" in commandData) {
-      if (!commandAsJson) {
-        commandsCollection.set(commandData.data.name, commandData);
-      } else {
-        commandsCollection = Array.isArray(commandsCollection)
-          ? [...commandsCollection, commandData.data.toJSON()]
-          : new Array();
-      }
+      commandsCollection.set(commandData.data.name, commandData);
     } else {
       console.log(
         `[WARNING] The command at ${commandFilePath} must have this properties: data, execute`

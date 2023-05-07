@@ -11,7 +11,7 @@ const newQuestionCommand = new SlashCommandBuilder()
   });
 
 function getQuestionsChannel(server) {
-  const serverChannels = server.channels;
+  const serverChannels = server.channels.cache;
 
   const questionsChannel = serverChannels.find((channel) => {
     return channel.name == "Questions";
@@ -27,7 +27,7 @@ function getQuestionsChannel(server) {
 }
 
 async function addOnQuestionChannel(interactionData) {
-  const question = interactionData.getString("question");
+  const question = interactionData.options.getString("question");
   const serverQuestionWasSent = interactionData.guild;
 
   try {
@@ -35,6 +35,7 @@ async function addOnQuestionChannel(interactionData) {
 
     questionsChannel.send(question);
   } catch (channelNotFoundError) {
+    interactionData.reply(channelNotFoundError.message);
     console.error(channelNotFoundError.message);
   }
 }
@@ -55,7 +56,7 @@ function getAvailableMonitors(serverMembers) {
 }
 
 async function notifyAvailableMonitors(interactionData) {
-  const newQuestion = interactionData.getString("question");
+  const newQuestion = interactionData.options.getString("question");
   const questionSenderId = interactionData.member.id;
 
   const serverMembers = await interactionData.guild.members.fetch();

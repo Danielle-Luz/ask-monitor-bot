@@ -8,10 +8,15 @@ const {
 
 async function registerBotCommands() {
   const botApi = new REST().setToken(process.env.BOT_TOKEN);
-  const commandsCollection = addCommandsFromAllFilesInCollection(true);
+  
+  const commandsCollection = Array.from(
+    addCommandsFromAllFilesInCollection().values()
+  ).map((commandData) => {
+    return commandData.data.toJSON();
+  });
 
   try {
-    await botApi.put(Routes.applicationGuildCommands(process.env.CLIENT_ID), {
+    await botApi.put(Routes.applicationCommands(process.env.CLIENT_ID), {
       body: commandsCollection,
     });
   } catch (error) {
