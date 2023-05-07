@@ -1,3 +1,5 @@
+require("dotenv/config");
+
 const { Client, Events, GatewayIntentBits } = require("discord.js");
 const { executeCommandFromCollection } = require("./commands/commands-loader");
 

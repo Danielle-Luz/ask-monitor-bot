@@ -1,5 +1,4 @@
-const folderReader = require("node:fs");
-const folderPathConcatenator = require("node:path");
+require("dotenv/config");
 
 const { REST, Routes } = require("discord.js");
 
