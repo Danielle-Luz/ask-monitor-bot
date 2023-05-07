@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits } = require("dicord.js");
+const { Client, GatewayIntentBits } = require("discord.js");
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
