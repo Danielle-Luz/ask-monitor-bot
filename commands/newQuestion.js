@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, CommandInteraction } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 
 const newQuestionCommand = new SlashCommandBuilder()
   .setName("newquestion")
@@ -71,6 +71,10 @@ async function notifyAvailableMonitors(interactionData) {
 
 async function handleNewQuestion(interactionData) {
   if (!interactionData.isChatInputCommand()) {
+    return;
+  }
+
+  if (interactionData.commandName != newQuestionCommand.name) {
     return;
   }
 
