@@ -4,12 +4,10 @@ const newQuestionCommand = new SlashCommandBuilder()
   .setName("newquestion")
   .setDescription("Creates a new question in the 'Questions' channel")
   .addStringOption((question) => {
-    return (
-      question
+    return question
       .setName("question")
       .setDescription("The question to be sent")
-      .setRequired(true)
-    );
+      .setRequired(true);
   });
 
 function getQuestionsChannel(server) {
@@ -29,7 +27,7 @@ function getQuestionsChannel(server) {
 }
 
 async function addOnQuestionChannel(interactionData) {
-  const question = interactionData.options.get("question");
+  const question = interactionData.getString("question");
   const serverQuestionWasSent = interactionData.guild;
 
   try {
@@ -57,7 +55,7 @@ function getAvailableMonitors(serverMembers) {
 }
 
 async function notifyAvailableMonitors(interactionData) {
-  const newQuestion = interactionData.options.get("question");
+  const newQuestion = interactionData.getString("question");
   const questionSenderId = interactionData.member.id;
 
   const serverMembers = await interactionData.guild.members.fetch();
