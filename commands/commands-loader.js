@@ -20,7 +20,7 @@ function addCommandsFromAllFilesInCollection(commandAsJson) {
       commandFile
     );
     const commandData = require(commandFilePath);
-
+    
     if ("data" in commandData && "execute" in commandData) {
       if (!commandAsJson) {
         commandsCollection.set(commandData.data.name, commandData);

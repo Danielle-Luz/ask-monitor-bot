@@ -8,7 +8,7 @@ const {
 
 async function registerBotCommands() {
   const botApi = new REST().setToken(process.env.BOT_TOKEN);
-  const commandsCollection = addCommandsFromAllFilesInCollection();
+  const commandsCollection = addCommandsFromAllFilesInCollection(true);
 
   try {
     await botApi.put(Routes.applicationGuildCommands(process.env.CLIENT_ID), {

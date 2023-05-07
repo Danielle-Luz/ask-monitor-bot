@@ -4,10 +4,12 @@ const newQuestionCommand = new SlashCommandBuilder()
   .setName("newquestion")
   .setDescription("Creates a new question in the 'Questions' channel")
   .addStringOption((question) => {
-    question
+    return (
+      question
       .setName("question")
       .setDescription("The question to be sent")
-      .setRequired(true);
+      .setRequired(true)
+    );
   });
 
 function getQuestionsChannel(server) {
