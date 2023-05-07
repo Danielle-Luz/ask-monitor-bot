@@ -13,6 +13,8 @@ const bot = new Client({
   ],
 });
 
+require("./deploy-commands");
+
 bot.on(Events.InteractionCreate, executeCommandFromCollection);
 
 bot.login(BOT_TOKEN);
