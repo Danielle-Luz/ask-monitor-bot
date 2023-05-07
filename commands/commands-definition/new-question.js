@@ -14,7 +14,7 @@ function getQuestionsChannel(server) {
   const serverChannels = server.channels.cache;
 
   const questionsChannel = serverChannels.find((channel) => {
-    return channel.name == "Questions";
+    return channel.name == "questions";
   });
 
   if (!questionsChannel) {
@@ -33,7 +33,7 @@ async function addOnQuestionChannel(interactionData) {
   try {
     const questionsChannel = getQuestionsChannel(serverQuestionWasSent);
 
-    questionsChannel.send(question);
+    await questionsChannel.send(question);
   } catch (channelNotFoundError) {
     interactionData.reply(channelNotFoundError.message);
     console.error(channelNotFoundError.message);
@@ -42,11 +42,12 @@ async function addOnQuestionChannel(interactionData) {
 
 function getAvailableMonitors(serverMembers) {
   const availableMonitors = serverMembers.filter((member) => {
-    const memberIsAvailable = member.presence.status == "online";
+    const memberIsAvailable = member.presence?.status == "online";
 
     const memberRoles = member.roles.cache;
+
     const memberIsMonitor = memberRoles.some((role) => {
-      role.name == "Monitor";
+      return role.name == "Monitor";
     });
 
     return memberIsAvailable && memberIsMonitor;
@@ -63,10 +64,10 @@ async function notifyAvailableMonitors(interactionData) {
 
   const availableMonitors = getAvailableMonitors(serverMembers);
 
-  availableMonitors.forEach((monitor) => {
+  availableMonitors.forEach(async (monitor) => {
     const notifyMessage = `@${questionSenderId} sent this new question: ${newQuestion}`;
 
-    monitor.send(notifyMessage);
+    await monitor.send(notifyMessage);
   });
 }
 
@@ -81,6 +82,10 @@ async function handleNewQuestion(interactionData) {
 
   await addOnQuestionChannel(interactionData);
   await notifyAvailableMonitors(interactionData);
+
+  await interactionData.reply(
+    "The question was posted in the channels questions and have also been submited to the available monitors"
+  );
 }
 
 module.exports = {
